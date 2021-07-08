@@ -7,22 +7,26 @@ var logger = require('morgan');
 // router 객체를 만든 후 app.js 파일에서 이들을 미들웨어로 사용하여 라우팅 
 var indexRouter = require('./routes/index'); //routes 폴더에 있는 js 파일(router 객체)을 require
 var usersRouter = require('./routes/users'); 
-var DBtestRouter = require('./routes/DBtest'); 
+var boardRouter = require('./routes/board'); 
 
 var session = require('express-session');
 
 var app = express(); // express 패키지를 호출하여 app 변수 객체 생성
+
+//DB 연결
+const mariaDB = require('./config/maria_config');
+mariaDB.connect();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 
-/* 커스텀 미들웨어 적용 */
-app.use(function (req, res, next) {
-  console.log(req.url, '=========');
-  next();
-});
+// /* 커스텀 미들웨어 적용 */
+// app.use(function (req, res, next) {
+//   console.log(req.url, '=========');
+//   next();
+// });
 
 
 /* 주요 미들웨어 */
@@ -48,18 +52,18 @@ app.use(session({
 /* 라우팅 미들웨어 */
 app.use('/', indexRouter); // 주소가 /로 시작하면 routes/index.js를 호출
 app.use('/users', usersRouter); // 주소가 /users로 시작하면 routes/users.js를 호출
-app.use('/dbtest', DBtestRouter); 
+app.use('/board', boardRouter); 
 
 app.use('/', function (req, res, next) {
-  console.log('/ 주소의 요청일 때 실행됩니다.\n\n');
+  console.log('/ 주소의 요청일 때만 실행됩니다.');
   next();
 });
 app.get('/', function (req, res, next) {
-  console.log('GET 메서드 / 주소의 요청일 때만 실행됩니다.\n\n');
+  console.log('GET 메서드');
   next();
 });
 app.post('/data', function (req, res, next) {
-  console.log('POST 메서드 /data 주소의 요청일 때만 실행됩니다.\n\n');
+  console.log('POST 메서드');
   next();
 });
 
