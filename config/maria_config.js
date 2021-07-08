@@ -7,4 +7,5 @@ const conn = maria.createConnection({
   database: 'sumin',
   connectionLimit: 5
 });
+
 module.exports = conn;

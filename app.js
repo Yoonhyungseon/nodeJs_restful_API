@@ -4,7 +4,28 @@ var path = require('path');
 var cookieParser = require('cookie-parser'); // 특정 문자열로 쿠키에 서명
 var logger = require('morgan');
 
-// router 객체를 만든 후 app.js 파일에서 이들을 미들웨어로 사용하여 라우팅 
+/**************************************************
+* Passport 설정
+**************************************************/
+// var passport = require('passport') //passport module add
+//   , LocalStrategy = require('passport-local').Strategy;
+// var cookieSession = require('cookie-session');
+// var flash = require('connect-flash');
+
+// app.use(cookieSession({
+//   keys: ['node_yun'],
+//   cookie: {
+//     maxAge: 1000 * 60 * 60 // 유효기간 1시간
+//   }
+// }));
+// app.use(flash());
+// app.use(passport.initialize());
+// app.use(passport.session());
+
+/**************************************************
+* router 객체 생성
+* router 객체를 만든 후 app.js 파일에서 이들을 미들웨어로 사용하여 라우팅 
+**************************************************/
 var indexRouter = require('./routes/index'); //routes 폴더에 있는 js 파일(router 객체)을 require
 var usersRouter = require('./routes/users'); 
 var boardRouter = require('./routes/board'); 
@@ -13,7 +34,9 @@ var session = require('express-session');
 
 var app = express(); // express 패키지를 호출하여 app 변수 객체 생성
 
-//DB 연결
+/**************************************************
+* DB 연결
+**************************************************/
 const mariaDB = require('./config/maria_config');
 mariaDB.connect();
 
@@ -21,15 +44,17 @@ mariaDB.connect();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-
-// /* 커스텀 미들웨어 적용 */
+/**************************************************
+* 커스텀 미들웨어
+**************************************************/
 // app.use(function (req, res, next) {
 //   console.log(req.url, '=========');
 //   next();
 // });
 
-
-/* 주요 미들웨어 */
+/**************************************************
+* 주요 미들웨어
+**************************************************/
 app.use(logger('dev')); /* morgan 미들웨어: 요청 정보를 콘솔에 기록 */  // 주요 인자: dev, short, common, combined 등
 app.use(express.json()); // 요청 들어온 본문을 JSON으로 해석
 app.use(express.urlencoded({ extended: false })); // 요청 들어온 본문을 querystring을 사용하여 해석
@@ -37,7 +62,10 @@ app.use(cookieParser()); // cookie-parser: 요청에 동봉된 쿠키 해석
 app.use(express.static(path.join(__dirname, 'public'))); //정적 파일을 제공하는 폴더를 public 폴더로 지정 (/public/abc.png -> abc.png)
 // app.use('/img', express.static(path.join(__dirname, 'public'))); // public 폴더 경로를 img로 지정 (/public/abc.png => /img/abc.png)
 
-/* express-session 미들웨어 */ // express-session은 cookie-parser 뒤에 놓는 것이 안전
+/**************************************************
+* express-session 미들웨어 
+* express-session은 cookie-parser 뒤에 놓는 것이 안전
+**************************************************/
 app.use(session({
   resave: false, // 세션 수정사항이 없더라도 세션을 다시 저장할 것인지?
   saveUninitialized: false, // 세션에 저장할 내역이 없더라도 세션을 저장할 것인지? (방문자 추적 용도)
@@ -48,8 +76,9 @@ app.use(session({
   },
 }));
 
-
-/* 라우팅 미들웨어 */
+/**************************************************
+* 라우팅 미들웨어
+**************************************************/
 app.use('/', indexRouter); // 주소가 /로 시작하면 routes/index.js를 호출
 app.use('/users', usersRouter); // 주소가 /users로 시작하면 routes/users.js를 호출
 app.use('/board', boardRouter); 
@@ -67,13 +96,16 @@ app.post('/data', function (req, res, next) {
   next();
 });
 
-
-/* 404(Not Found) 처리 미들웨어 */
+/**************************************************
+* 404(Not Found) 처리 미들웨어
+**************************************************/
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-/* 에러 처리 미들웨어 */
+/**************************************************
+* 에러 처리 미들웨어
+**************************************************/
 app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -83,5 +115,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// bin/www 파일에서 사용하기 위한 app 객체 모듈화
+/**************************************************
+* bin/www 파일에서 사용하기 위한 app 객체 모듈화
+**************************************************/
 module.exports = app;

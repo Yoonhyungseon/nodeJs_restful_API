@@ -4,6 +4,8 @@ var router = express.Router(); // router 객체 생성
 
 const maria = require('../config/maria_config'); 
 
+var boardMapper = require('../models/boardMapper');
+
 /**************************************************
 * @Url : board/list
 * @Method : GET
@@ -12,105 +14,55 @@ const maria = require('../config/maria_config');
 * @Version : 2021. 7. 7.
 **************************************************/
 router.get('/list', function(req, res, next) {
-  console.info("\n==================>board/list");
+  console.info("\n===>board/list");
 
-  var querystring = `SELECT * 
-                     FROM nodeJs_DB_BOARD
-                     WHERE is_release = 'Y'`;
-
-  maria.query(querystring, function(err, rows, fields) { 
-    if(!err) { 
-      console.info("success : 'YES'");
-      res.send(rows); 
-    } else { 
-      console.log("err : " + err);
-      res.send(err); 
-    }
+  boardMapper.getList(req, function(rows){
+    res.send(rows);
   });
 });
-
+  
 /**************************************************
 * @Url : board/view
 * @Method : GET
-* @Description : 게시판 상세
+* @Description : 게시물 상세
 * @Author : Hyung-Seon. Yoon
 * @Version : 2021. 7. 7.
 **************************************************/
 router.get('/:seq', function(req, res, next) {
-  console.info("\n==================>board/view", req.query);
-  var seq = req.query.seq;
-  var querystring = `SELECT * 
-                     FROM nodeJs_DB_BOARD
-                     WHERE seq = ?`;
-
-  maria.query(querystring, seq, function(err, rows, fields) { 
-    if(!err) { 
-      console.info("success : 'YES'");
-      res.send(rows); 
-      if (rows.length <= 0) console.log(req.query,"is empty");
-    } else { 
-      console.log("err : " + err);
-      res.send(err); 
-    }
+  console.info("\n===>board/view");
+  
+  boardMapper.getView(req, function(rows){
+    res.send(rows);
   });
 });
 
 /**************************************************
 * @Url : board/write
 * @Method : POST
-* @Description : 게시판 등록
+* @Description : 게시물 등록
 * @Author : Hyung-Seon. Yoon
 * @Version : 2021. 7. 7.
 **************************************************/
 router.post('/write', function(req, res, next) {
-  console.info("\n==================>board/wirte");
+  console.info("\n===>board/wirte");
 
-  var title = req.body.title;
-  var contents = req.body.contents;
-  var images = req.body.images;
-  var created_by = req.body.created_by;
-  var updated_by = req.body.updated_by;
-  var datas = [title, contents, images, created_by, updated_by];
-
-  var querystring = `INSERT INTO nodeJs_DB_BOARD
-                            (title, contents, images, created_by, updated_by, is_release) values(?, ?, ?, ?, NOW(), "Y")`;
-
-  maria.query(querystring, datas, function(err, rows, fields) { 
-    if(!err) { 
-      response = { success : 'YES', info : rows }; 
-      console.info("success : 'YES'");
-      res.send(response); 
-    } else { 
-      console.log("err : " + err);
-      res.send(err); 
-    }
+  boardMapper.boardWrite(req, function(rows){
+    res.send(rows);
   });
 });
 
 /**************************************************
 * @Url : board/delete
 * @Method : DELETE
-* @Description : 게시판 삭제
+* @Description : 게시물 삭제
 * @Author : Hyung-Seon. Yoon
 * @Version : 2021. 7. 5.
 **************************************************/
 router.delete('/delete', function(req, res, next) {
-  console.info("\n==================>board/delte");
+  console.info("\n===>board/delete");
 
-  var seq = req.body.seq;
-  var querystring = `UPDATE nodeJs_DB_BOARD
-                        SET is_release = "N"
-                      WHERE seq =  ?`;
-
-  maria.query(querystring, seq, function(err, rows, fields) { 
-    if(!err) { 
-      response = { success : 'YES', info : rows }; 
-      console.info("success : 'YES'");
-      res.send(response); 
-    } else { 
-      console.log("err : " + err);
-      res.send(err); 
-    }
+  boardMapper.boardDelete(req, function(rows){
+    res.send(rows);
   });
 });
 
