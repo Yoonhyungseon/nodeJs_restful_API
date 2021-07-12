@@ -1,26 +1,19 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser'); // 특정 문자열로 쿠키에 서명
 var logger = require('morgan');
 
 /**************************************************
-* Passport 설정
+* express-session 
 **************************************************/
-// var passport = require('passport') //passport module add
-//   , LocalStrategy = require('passport-local').Strategy;
-// var cookieSession = require('cookie-session');
-// var flash = require('connect-flash');
+var session = require('express-session');
+/**************************************************
+* cookieParser
+**************************************************/
+var cookieParser = require('cookie-parser'); // 특정 문자열로 쿠키에 서명
 
-// app.use(cookieSession({
-//   keys: ['node_yun'],
-//   cookie: {
-//     maxAge: 1000 * 60 * 60 // 유효기간 1시간
-//   }
-// }));
-// app.use(flash());
-// app.use(passport.initialize());
-// app.use(passport.session());
+
+var app = express(); // express 패키지를 호출하여 app 변수 객체 생성
 
 /**************************************************
 * router 객체 생성
@@ -29,10 +22,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index'); //routes 폴더에 있는 js 파일(router 객체)을 require
 var usersRouter = require('./routes/users'); 
 var boardRouter = require('./routes/board'); 
+var loginRouter = require('./routes/login'); 
 
-var session = require('express-session');
-
-var app = express(); // express 패키지를 호출하여 app 변수 객체 생성
 
 /**************************************************
 * DB 연결
@@ -64,7 +55,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //정적 파일을 제�
 
 /**************************************************
 * express-session 미들웨어 
-* express-session은 cookie-parser 뒤에 놓는 것이 안전
+* express-session은 cookie-parser 뒤에
 **************************************************/
 app.use(session({
   resave: false, // 세션 수정사항이 없더라도 세션을 다시 저장할 것인지?
@@ -77,11 +68,31 @@ app.use(session({
 }));
 
 /**************************************************
+* Passport 설정/ 세션 뒤에 위치
+**************************************************/
+var passport = require('passport') //passport module add
+// var passportConfig = require('./config/passport_config');
+var cookieSession = require('cookie-session');
+var flash = require('connect-flash');
+
+app.use(cookieSession({
+  keys: ['node_passport'],
+  cookie: {
+    maxAge: 1000 * 60 * 60 // 유효기간 1시간
+  }
+}));
+// passportConfig();
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+/**************************************************
 * 라우팅 미들웨어
 **************************************************/
 app.use('/', indexRouter); // 주소가 /로 시작하면 routes/index.js를 호출
 app.use('/users', usersRouter); // 주소가 /users로 시작하면 routes/users.js를 호출
 app.use('/board', boardRouter); 
+app.use('/login', loginRouter); 
 
 app.use('/', function (req, res, next) {
   console.log('/ 주소의 요청일 때만 실행됩니다.');

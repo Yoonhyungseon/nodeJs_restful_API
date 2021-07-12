@@ -1,11 +1,17 @@
 var express = require('express');
-var router = express.Router(); // router 객체 생성
+var router = express.Router(); 
 
-/* GET home page. */
-// '/' 주소로 GET 요청 시 살행
+/**************************************************
+* @Url : /
+* @Method : GET
+* @Description : GET home page.
+* @Author : Hyung-Seon. Yoon
+* @Version : 2021. 7. 7.
+**************************************************/
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
   console.log('this it index page');
+
+  res.render('index', { title: 'Express' });
 });
 
-module.exports = router;  // 라우터 모듈화
+module.exports = router;

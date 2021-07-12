@@ -2,7 +2,7 @@ var commonMapper = require('../models/commonMapper');
 
 /**************************************************
 * @Method : boardMapper
-* @Description : 게시판 mapper
+* @Description : 게시판 Mapper
 * @Author : Hyung-Seon. Yoon
 * @Version : 2021. 7. 8.
 **************************************************/
@@ -23,6 +23,23 @@ var boardMapper = {
     },
 
     /**************************************************
+    * @Method : updateRelease
+    * @Description : 게시물 노출여부 변경
+    * @Author : Hyung-Seon. Yoon
+    * @Version : 2021. 7. 9.
+    **************************************************/
+     updateRelease: function(req, callback){
+        var seq = req.body.seq;
+        var is_release = req.body.is_release;
+        var data = [is_release, seq];
+        var querystring = `UPDATE nodeJs_DB_BOARD
+                              SET is_release = ?
+                            WHERE seq =  ?`; 
+                                    
+        commonMapper.getQuery(querystring, data, req, callback);
+        },
+
+    /**************************************************
     * @Method : getView
     * @Description : 게시물 상세 조회
     * @Author : Hyung-Seon. Yoon
@@ -34,8 +51,34 @@ var boardMapper = {
                            FROM nodeJs_DB_BOARD
                            WHERE seq = ?`;
                                 
-            commonMapper.getQuery(querystring, seq, req, callback);
+        commonMapper.getQuery(querystring, seq, req, callback);
     },
+
+    /**************************************************
+    * @Method : updateContents
+    * @Description : 게시물 수정
+    * @Author : Hyung-Seon. Yoon
+    * @Version : 2021. 7. 9.
+    **************************************************/
+     updateContents: function(req, callback){
+        var seq = req.body.seq;
+        var title = req.body.title;
+        var contents = req.body.contents;
+        var images = req.body.images;
+        var updated_by = req.body.updated_by;
+        var is_release = req.body.is_release;
+        var data = [title, contents, images, is_release, seq];
+
+        var querystring = `UPDATE nodeJs_DB_BOARD
+                              SET title = ?,
+                                  contents = ?,
+                                  images = ?,
+                                  updated_by = NOW(),
+                                  is_release = ?
+                            WHERE seq =  ?`;
+                                    
+        commonMapper.getQuery(querystring, data, req, callback);
+        },
 
     /**************************************************
     * @Method : boardWrite
