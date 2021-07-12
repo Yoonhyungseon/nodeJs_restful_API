@@ -2,18 +2,18 @@ const { response } = require('express');
 var express = require('express');
 var router = express.Router(); 
 
-const maria = require('../config/maria_config'); 
-var boardMapper = require('../models/boardMapper');
+const maria = require('../../config/maria_config'); 
+var boardMapper = require('../../models/boardMapper');
 
 /**************************************************
-* @Url : board/list
+* @Url : board
 * @Method : GET
 * @Description : 게시물 리스트 조회
 * @Author : Hyung-Seon. Yoon
 * @Version : 2021. 7. 7.
 **************************************************/
-router.get('/list', function(req, res, next) {
-  console.info("\> 게시물 리스트 조회");
+router.get('/', function(req, res, next) {
+  console.info("\n> 게시물 리스트 조회");
 
   boardMapper.getList(req, function(rows){
     res.send(rows);
@@ -21,13 +21,13 @@ router.get('/list', function(req, res, next) {
 });
 
 /**************************************************
-* @Url : board/view
+* @Url : board
 * @Method : PATCH
 * @Description : 게시물 노출여부 변경
 * @Author : Hyung-Seon. Yoon
 * @Version : 2021. 7. 9.
 **************************************************/
-router.patch('/view', function(req, res, next) {
+router.patch('/', function(req, res, next) {
   console.info("\n> 게시물 노출여부 변경");
   
   boardMapper.updateRelease(req, function(rows){
@@ -56,13 +56,13 @@ router.get('/:mode', function(req, res, next) {
 });
 
 /**************************************************
-* @Url : board/update
+* @Url : board
 * @Method : PUT
 * @Description : 게시물 수정
 * @Author : Hyung-Seon. Yoon
 * @Version : 2021. 7. 9.
 **************************************************/
-router.put('/update', function(req, res, next) {
+router.put('/', function(req, res, next) {
   console.info("\n> 게시물 수정");
   
   boardMapper.updateContents(req, function(rows){
@@ -71,13 +71,13 @@ router.put('/update', function(req, res, next) {
 });
 
 /**************************************************
-* @Url : board/write
+* @Url : board
 * @Method : POST
 * @Description : 게시물 등록
 * @Author : Hyung-Seon. Yoon
 * @Version : 2021. 7. 7.
 **************************************************/
-router.post('/write', function(req, res, next) {
+router.post('/', function(req, res, next) {
   console.info("\n> 게시물 등록");
 
   boardMapper.boardWrite(req, function(rows){
@@ -86,13 +86,13 @@ router.post('/write', function(req, res, next) {
 });
 
 /**************************************************
-* @Url : board/delete
+* @Url : board
 * @Method : DELETE
 * @Description : 게시물 삭제
 * @Author : Hyung-Seon. Yoon
 * @Version : 2021. 7. 5.
 **************************************************/
-router.delete('/delete', function(req, res, next) {
+router.delete('/', function(req, res, next) {
   console.info("\n> 게시물 삭제");
 
   boardMapper.boardDelete(req, function(rows){

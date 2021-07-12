@@ -19,9 +19,12 @@ var app = express(); // express 패키지를 호출하여 app 변수 객체 생�
 * router 객체 생성
 * router 객체를 만든 후 app.js 파일에서 이들을 미들웨어로 사용하여 라우팅 
 **************************************************/
-var indexRouter = require('./routes/index'); //routes 폴더에 있는 js 파일(router 객체)을 require
+var indexRouter = require('./routes/user/indexController'); //routes 폴더에 있는 js 파일(router 객체)을 require
 var usersRouter = require('./routes/users'); 
-var boardRouter = require('./routes/board'); 
+var boardRouter = require('./routes/user/boardController'); 
+var noticeRouter = require('./routes/user/noticeController'); 
+var questionRouter = require('./routes/user/questionController'); 
+var adminQuestionRouter = require('./routes/admin/adminQuestionController'); 
 var loginRouter = require('./routes/login'); 
 
 
@@ -70,21 +73,21 @@ app.use(session({
 /**************************************************
 * Passport 설정/ 세션 뒤에 위치
 **************************************************/
-var passport = require('passport') //passport module add
-// var passportConfig = require('./config/passport_config');
-var cookieSession = require('cookie-session');
-var flash = require('connect-flash');
+// var passport = require('passport') //passport module add
+// // var passportConfig = require('./config/passport_config');
+// var cookieSession = require('cookie-session');
+// var flash = require('connect-flash');
 
-app.use(cookieSession({
-  keys: ['node_passport'],
-  cookie: {
-    maxAge: 1000 * 60 * 60 // 유효기간 1시간
-  }
-}));
-// passportConfig();
-app.use(flash());
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(cookieSession({
+//   keys: ['node_passport'],
+//   cookie: {
+//     maxAge: 1000 * 60 * 60 // 유효기간 1시간
+//   }
+// }));
+// // passportConfig();
+// app.use(flash());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 /**************************************************
 * 라우팅 미들웨어
@@ -92,6 +95,9 @@ app.use(passport.session());
 app.use('/', indexRouter); // 주소가 /로 시작하면 routes/index.js를 호출
 app.use('/users', usersRouter); // 주소가 /users로 시작하면 routes/users.js를 호출
 app.use('/board', boardRouter); 
+app.use('/notice', noticeRouter); 
+app.use('/question', questionRouter); 
+app.use('/adminQuestion', adminQuestionRouter); 
 app.use('/login', loginRouter); 
 
 app.use('/', function (req, res, next) {

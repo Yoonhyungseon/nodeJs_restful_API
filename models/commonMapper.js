@@ -20,6 +20,7 @@ var commonMapper = {
             if(!err) {
                 console.log("success : 'YES'");
                 if (rows.length <= 0) console.log(req.query,"is empty");
+                if (rows.affectedRows <= 0) console.log("affectedRows : ", rows.affectedRows);
 
                 response = { success : 'YES', info : rows }; 
                 callback(response);
