@@ -9,7 +9,7 @@ var router = express.Router();
 * @Version : 2021. 7. 7.
 **************************************************/
 router.get('/', function(req, res, next) {
-  console.log('this it index page');
+  console.log('\nthis is index page!');
 
   res.render('index', { title: 'Express' });
 });
