@@ -25,8 +25,6 @@ var boardRouter = require('./routes/user/boardController');
 var noticeRouter = require('./routes/user/noticeController'); 
 var questionRouter = require('./routes/user/questionController'); 
 var adminQuestionRouter = require('./routes/admin/adminQuestionController'); 
-var loginRouter = require('./routes/login'); 
-
 
 /**************************************************
 * DB 연결
@@ -60,34 +58,33 @@ app.use(express.static(path.join(__dirname, 'public'))); //정적 파일을 제�
 * express-session 미들웨어 
 * express-session은 cookie-parser 뒤에
 **************************************************/
-app.use(session({
-  resave: false, // 세션 수정사항이 없더라도 세션을 다시 저장할 것인지?
-  saveUninitialized: false, // 세션에 저장할 내역이 없더라도 세션을 저장할 것인지? (방문자 추적 용도)
-  secret: 'secret code', // 필수 항목. 클라이언트에 세션 쿠키를 보낼때 사용할 서명 값. cookie-parser의 secret과 같게 설정해야 함.
-  cookie: {
-    httpOnly: true, // 클라이언트에서 쿠키를 확인하지 못하도록 함
-    secure: false, // https가 아닌 환경에서도 사용할 수 있도록 함 (배포 시에는 true 권장)
-  },
-}));
+// app.use(session({
+//   resave: false, // 세션 수정사항이 없더라도 세션을 다시 저장할 것인지?
+//   saveUninitialized: false, // 세션에 저장할 내역이 없더라도 세션을 저장할 것인지? (방문자 추적 용도)
+//   secret: 'secret code', // 필수 항목. 클라이언트에 세션 쿠키를 보낼때 사용할 서명 값. cookie-parser의 secret과 같게 설정해야 함.
+//   cookie: {
+//     httpOnly: true, // 클라이언트에서 쿠키를 확인하지 못하도록 함
+//     secure: false, // https가 아닌 환경에서도 사용할 수 있도록 함 (배포 시에는 true 권장)
+//   }
+// }));
 
 /**************************************************
 * Passport 설정/ 세션 뒤에 위치
 **************************************************/
-// var passport = require('passport') //passport module add
-// // var passportConfig = require('./config/passport_config');
-// var cookieSession = require('cookie-session');
-// var flash = require('connect-flash');
+var passport = require('passport') //passport module add
+var LocalStrategy = require('passport-local').Strategy;
+var cookieSession = require('cookie-session');
+var flash = require('connect-flash');
 
-// app.use(cookieSession({
-//   keys: ['node_passport'],
-//   cookie: {
-//     maxAge: 1000 * 60 * 60 // 유효기간 1시간
-//   }
-// }));
-// // passportConfig();
-// app.use(flash());
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(cookieSession({
+  keys: ['Hyungseon'],
+  cookie: {
+    maxAge: 1000 * 60 * 60 // 유효기간 1시간
+  }
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
 /**************************************************
 * 라우팅 미들웨어
@@ -98,7 +95,6 @@ app.use('/board', boardRouter);
 app.use('/notice', noticeRouter); 
 app.use('/question', questionRouter); 
 app.use('/adminQuestion', adminQuestionRouter); 
-app.use('/login', loginRouter); 
 
 app.use('/', function (req, res, next) {
   console.log('/ 주소의 요청일 때만 실행됩니다.');

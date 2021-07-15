@@ -18,7 +18,7 @@ var commonMapper = {
         
         maria.query(querystring, data, function(err, rows, fields){
             if(!err) {
-                console.log("success : 'YES'");
+                console.log("\nmysql success : 'YES'");
                 if (rows.length <= 0) console.log(req.query,"is empty");
                 if (rows.affectedRows <= 0) console.log("affectedRows : ", rows.affectedRows);
 
