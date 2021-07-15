@@ -2,7 +2,7 @@ const { response } = require('express');
 var express = require('express');
 var router = express.Router(); 
 
-const maria = require('../../config/maria_config'); 
+const maria = require('../../config/mariaConf'); 
 var noticeMapper = require('../../models/noticeMapper');
 
 /**************************************************

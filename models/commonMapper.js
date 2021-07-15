@@ -1,4 +1,4 @@
-const maria = require('../config/maria_config'); 
+const maria = require('../config/mariaConf'); 
 
 /**************************************************
 * @Method : commonMapper

@@ -12,8 +12,10 @@ var session = require('express-session');
 **************************************************/
 var cookieParser = require('cookie-parser'); // 특정 문자열로 쿠키에 서명
 
-
-var app = express(); // express 패키지를 호출하여 app 변수 객체 생성
+/**************************************************
+* express 패키지 호출, app 변수 객체 생성
+**************************************************/
+var app = express(); 
 
 /**************************************************
 * router 객체 생성
@@ -29,10 +31,12 @@ var adminQuestionRouter = require('./routes/admin/adminQuestionController');
 /**************************************************
 * DB 연결
 **************************************************/
-const mariaDB = require('./config/maria_config');
+const mariaDB = require('./config/mariaConf');
 mariaDB.connect();
 
-// view engine setup
+/**************************************************
+* view engine setup
+**************************************************/
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
@@ -97,7 +101,7 @@ app.use('/question', questionRouter);
 app.use('/adminQuestion', adminQuestionRouter); 
 
 app.use('/', function (req, res, next) {
-  console.log('/ 주소의 요청일 때만 실행됩니다.');
+  console.log('/ 주소의 요청');
   next();
 });
 app.get('/', function (req, res, next) {

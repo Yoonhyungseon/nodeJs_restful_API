@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router(); 
 
 var isAuthenticated = require('../../config/isAuthenticated');
-var passportConf = require('../../config/passportConf');
-passport = passportConf.passport;
+var passportConf = require('../../config/passportConf')
+, passport = passportConf.passport;
 
 /**************************************************
 * @Url : /
