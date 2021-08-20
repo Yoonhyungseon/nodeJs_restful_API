@@ -17,6 +17,26 @@
 CREATE DATABASE IF NOT EXISTS `sumin` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `sumin`;
 
+-- 테이블 sumin.nodeJs_DB_BOARD 구조 내보내기
+CREATE TABLE IF NOT EXISTS `nodeJs_DB_BOARD` (
+  `seq` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) DEFAULT NULL,
+  `contents` text,
+  `images` varchar(200) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` varchar(50) DEFAULT NULL,
+  `is_release` char(1) DEFAULT 'Y',
+  `delete_yn` char(1) DEFAULT 'N',
+  PRIMARY KEY (`seq`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 sumin.nodeJs_DB_BOARD:~2 rows (대략적) 내보내기
+/*!40000 ALTER TABLE `nodeJs_DB_BOARD` DISABLE KEYS */;
+INSERT IGNORE INTO `nodeJs_DB_BOARD` (`seq`, `title`, `contents`, `images`, `updated_at`, `created_by`, `is_release`, `delete_yn`) VALUES
+	(1, 'titleTEST', 'contentsTEST', 'imagesTEST', '2021-08-18 13:22:27', 'created_byTEST', 'Y', 'N'),
+	(2, 'new title!', 'new contents', 'new images', '2021-08-18 13:22:52', 'created_byTEST', 'Y', 'N');
+/*!40000 ALTER TABLE `nodeJs_DB_BOARD` ENABLE KEYS */;
+
 -- 테이블 sumin.nodeJs_DB_MEMBER 구조 내보내기
 CREATE TABLE IF NOT EXISTS `nodeJs_DB_MEMBER` (
   `seq` int(11) NOT NULL AUTO_INCREMENT COMMENT '고유번호',
